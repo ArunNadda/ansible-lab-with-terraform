@@ -62,5 +62,5 @@ variable "ansible_inv" {
 
 variable "repo" {
   description = "ansible lab repo"
-  default = "https://github.com/ArunNadda/ansible-lab-with-terraform"
+  default = "https://github.com/ArunNadda/ansible-exam-prep"
 }
