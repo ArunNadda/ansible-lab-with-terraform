@@ -1,0 +1,14 @@
+## state file
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+## logs
+*.log
+
+## dirs
+.terraform/
+
+## keys
+*.pem
+
+
