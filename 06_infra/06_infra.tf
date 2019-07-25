@@ -100,7 +100,7 @@ resource "aws_iam_role_policy" "ec2_admin_policy" {
   role = "${aws_iam_role.ctrl-node-ec2-role.id}"
   policy = "${data.template_file.role_policy.rendered}"
 }
-
+# web node
 resource "aws_instance" "node1" {
   ami = "${var.ec2_ami}"
   instance_type = "${var.ec2_size}"
@@ -108,12 +108,25 @@ resource "aws_instance" "node1" {
   vpc_security_group_ids = ["${aws_security_group.ansible-sg.id}"]
   associate_public_ip_address = "true"
   key_name = "${var.keypair}"
-  count = 3
+  count = 2
   tags = {
-    Name = "${var.prefix}-managed-node"
+    Name = "${var.prefix}-web-node"
   }
 }
-
+# db node
+resource "aws_instance" "node2" {
+  ami = "${var.ec2_ami}"
+  instance_type = "${var.ec2_size}"
+  subnet_id = "${aws_subnet.subnet1.id}"
+  vpc_security_group_ids = ["${aws_security_group.ansible-sg.id}"]
+  associate_public_ip_address = "true"
+  key_name = "${var.keypair}"
+  count = 1
+  tags = {
+    Name = "${var.prefix}-db-node"
+  }
+}
+# ctrl node
 resource "aws_instance" "controlnode" {
   ami = "${var.ec2_ami}"
   instance_type = "${var.ec2_size}"
