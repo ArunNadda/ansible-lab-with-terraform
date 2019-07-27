@@ -34,3 +34,8 @@ ansible all -m ping
 
 
 ```
+
+
+
+ansible lab practice document:
+https://github.com/ArunNadda/ansible-exam-prep
