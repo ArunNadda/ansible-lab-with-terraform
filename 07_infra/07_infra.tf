@@ -177,7 +177,7 @@ resource "aws_instance" "controlnode" {
 
   connection {
     type = "ssh"
-    user = "ec2-user"
+    user = "centos"
     private_key = "${file(var.ssh_key_private)}"
     host = "${aws_instance.controlnode.public_ip}"
   }

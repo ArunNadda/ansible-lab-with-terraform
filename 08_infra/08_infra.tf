@@ -100,7 +100,7 @@ resource "aws_iam_role_policy" "ec2_admin_policy" {
   role = "${aws_iam_role.ctrl-node-ec2-role.id}"
   policy = "${data.template_file.role_policy.rendered}"
 }
-# web node
+# web node centos
 resource "aws_instance" "node1" {
   ami = "${var.ec2_ami}"
   instance_type = "${var.ec2_size}"
@@ -108,13 +108,31 @@ resource "aws_instance" "node1" {
   vpc_security_group_ids = ["${aws_security_group.ansible-sg.id}"]
   associate_public_ip_address = "true"
   key_name = "${var.keypair}"
-  count = 2
+  count = 1
   tags = {
-    Name = "${var.prefix}-web-node"
+    Name = "${var.prefix}-web-node-centos"
   }
 }
-# db node
+
+## web node ubuntu
 resource "aws_instance" "node2" {
+  ami = "${var.ec2_u_ami}"
+  instance_type = "${var.ec2_size}"
+  subnet_id = "${aws_subnet.subnet1.id}"
+  vpc_security_group_ids = ["${aws_security_group.ansible-sg.id}"]
+  associate_public_ip_address = "true"
+  key_name = "${var.keypair}"
+  count = 1
+  tags = {
+    Name = "${var.prefix}-web-node-ubuntu"
+  }
+}
+
+## web node ubuntu
+
+
+# db node
+resource "aws_instance" "webnode" {
   ami = "${var.ec2_ami}"
   instance_type = "${var.ec2_size}"
   subnet_id = "${aws_subnet.subnet1.id}"
@@ -177,7 +195,7 @@ resource "aws_instance" "controlnode" {
 
   connection {
     type = "ssh"
-    user = "ec2-user"
+    user = "centos"
     private_key = "${file(var.ssh_key_private)}"
     host = "${aws_instance.controlnode.public_ip}"
   }
@@ -199,10 +217,18 @@ output "Ansible_Node_PrivateIP" {
   value = "${aws_instance.node1.*.private_ip}"
 }
 
-output "Ansible_Web_PublicIP" {
+output "Ansible_ubuntu_PublicIP" {
   value = "${aws_instance.node2.*.public_ip}"
 }
 
-output "Ansible_Web_PrivateIP" {
+output "Ansible_ubuntu_PrivateIP" {
   value = "${aws_instance.node2.*.private_ip}"
+}
+
+output "Ansible_Web_PublicIP" {
+  value = "${aws_instance.webnode.*.public_ip}"
+}
+
+output "Ansible_Web_PrivateIP" {
+  value = "${aws_instance.webnode.*.private_ip}"
 }

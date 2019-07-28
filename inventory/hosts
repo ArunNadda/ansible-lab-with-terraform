@@ -2,11 +2,15 @@
 localhost ansible_connection=local
 
 [web:children]
-tag_Name_ansbl-web-node
+tag_Name_ansbl_web_node
 
 [db:children]
-tag_Name_ansbl-db-node
+tag_Name_ansbl_db_node
 
 [ctrl:children]
-[tag_Name_ansbl-control-node]
+tag_Name_ansbl_control_node
+
+[mngd:children]
+db
+web
 
